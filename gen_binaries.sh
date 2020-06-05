@@ -17,8 +17,44 @@ RUN="spike pk -c "
 CMD_FILE=commands.txt
 INPUT_TYPE=test
 
-# the integer set
-BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
+# the integer set: 400 - 483
+# the float set: 410 - 482
+BENCHMARKS=( \
+	400.perlbench \
+	401.bzip2 \
+	403.gcc \
+	429.mcf \
+	445.gobmk \
+	456.hmmer \
+	458.sjeng \
+	462.libquantum \
+	464.h264ref \
+	471.omnetpp \
+	473.astar \
+	483.xalancbmk \
+	\
+	410.bwaves \
+	416.gamess \
+	433.milc \
+	434.zeusmp \
+	435.gromacs \
+	436.cactusADM \
+	437.leslie3d \
+	444.namd \
+	447.dealII \
+	450.soplex \
+	453.povray \
+	454.calculix \
+	459.GemsFDTD \
+	465.tonto \
+	470.lbm \
+	481.wrf \
+	482.sphinx3 \
+	998.specrand \
+	999.specrand \
+	)
+#BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
+
 
 # idiomatic parameter and option handling in sh
 compileFlag=false
@@ -67,6 +103,7 @@ if [ "$compileFlag" = true ]; then
    # copy over the config file we will use to compile the benchmarks
    cp $BUILD_DIR/../${CONFIGFILE} $SPEC_DIR/config/${CONFIGFILE}
    cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
+   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup fp
 #   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action scrub int
 
    if [ "$copyFlag" = true ]; then
