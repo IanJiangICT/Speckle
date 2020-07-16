@@ -13,7 +13,13 @@ fi
 
 CONFIG=riscv
 CONFIGFILE=${CONFIG}.cfg
-RUN="spike pk -c "
+PK_DIR=/opt/riscv-pk/riscv64-unknown-linux-gnu/bin
+
+if [ ! -f $PK_DIR/pk ]; then
+   echo "  No pk found under $PK_DIR"
+   exit 1
+fi
+RUN="spike -m4096 $PK_DIR/pk "
 CMD_FILE=commands.txt
 INPUT_TYPE=test
 
@@ -53,8 +59,6 @@ BENCHMARKS=( \
 	998.specrand \
 	999.specrand \
 	)
-#BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
-
 
 # idiomatic parameter and option handling in sh
 compileFlag=false
