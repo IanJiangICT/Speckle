@@ -14,6 +14,7 @@ fi
 CONFIG=riscv
 CONFIGFILE=${CONFIG}.cfg
 PK_DIR=/opt/riscv-pk/riscv64-unknown-linux-gnu/bin
+#CONFIG_CFLAGS="-march=rv64g"
 
 if [ ! -f $PK_DIR/pk ]; then
    echo "  No pk found under $PK_DIR"
@@ -108,7 +109,7 @@ done
 echo "== Speckle Options =="
 echo "  Config : " ${CONFIG}
 echo "  Input  : " ${INPUT_TYPE}
-echo "  compile: " $compileFlag
+echo "  compile: " $compileFlag " : " $CONFIG_CFLAGS
 echo "  run    : " $runFlag
 echo "  copy   : " $copyFlag
 echo "BenchList: " ${BENCHMARKS[@]}
@@ -131,6 +132,7 @@ if [ "$compileFlag" = true ]; then
    echo "Compiling SPEC..."
    # copy over the config file we will use to compile the benchmarks
    cp $BUILD_DIR/../${CONFIGFILE} $SPEC_DIR/config/${CONFIGFILE}
+   sed -i s/CFLAGS/$CONFIG_CFLAGS/ $SPEC_DIR/config/${CONFIGFILE}
    #cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
    #cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup fp
 #   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action scrub int
