@@ -61,12 +61,16 @@ BENCHMARKS=( \
 	)
 
 # idiomatic parameter and option handling in sh
+cleanFlag=false
 compileFlag=false
 runFlag=false
 copyFlag=false
 while test $# -gt 0
 do
    case "$1" in
+        --clean) 
+            cleanFlag=true
+            ;;
         --compile) 
             compileFlag=true
             ;;
@@ -100,6 +104,13 @@ echo ""
 BUILD_DIR=$PWD/build
 COPY_DIR=$PWD/${CONFIG}-spec-${INPUT_TYPE}
 mkdir -p build;
+
+if [ "$cleanFlag" = true ]; then
+	rm -rf $BUILD_DIR/*
+	rm -rf $SPEC_DIR/benchspec/CPU2006/*.*/exe
+	rm -rf $SPEC_DIR/benchspec/CPU2006/*.*/run
+	rm -rf $SPEC_DIR/benchspec/CPU2006/*.*/build
+fi
 
 # compile the binaries
 if [ "$compileFlag" = true ]; then
