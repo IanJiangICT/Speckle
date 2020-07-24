@@ -25,7 +25,7 @@ INPUT_TYPE=test
 
 # the integer set: 400 - 483
 # the float set: 410 - 482
-BENCHMARKS=( \
+BENCHMARKS_ALL=( \
 	400.perlbench \
 	401.bzip2 \
 	403.gcc \
@@ -60,6 +60,12 @@ BENCHMARKS=( \
 	999.specrand \
 	)
 
+BENCHMARKS_SINGLE=( \
+	429.mcf \
+	)
+
+BENCHMARKS=${BENCHMARKS_ALL[@]}
+
 # idiomatic parameter and option handling in sh
 cleanFlag=false
 compileFlag=false
@@ -80,6 +86,12 @@ do
         --copy)
             copyFlag=true
             ;;
+		*.*)
+			BENCHMARKS=$1
+			;;
+		all)
+			BENCHMARKS=${BENCHMARKS_ALL[@]}
+			;;
         --*) echo "ERROR: bad option $1"
             echo "  --compile (compile the SPEC benchmarks), --run (to run the benchmarks) --copy (copies, not symlinks, benchmarks to a new dir)"
             exit 1
@@ -92,12 +104,14 @@ do
     shift
 done
 
+
 echo "== Speckle Options =="
 echo "  Config : " ${CONFIG}
 echo "  Input  : " ${INPUT_TYPE}
 echo "  compile: " $compileFlag
 echo "  run    : " $runFlag
 echo "  copy   : " $copyFlag
+echo "BenchList: " ${BENCHMARKS[@]}
 echo ""
 
 
@@ -117,8 +131,8 @@ if [ "$compileFlag" = true ]; then
    echo "Compiling SPEC..."
    # copy over the config file we will use to compile the benchmarks
    cp $BUILD_DIR/../${CONFIGFILE} $SPEC_DIR/config/${CONFIGFILE}
-   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
-   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup fp
+   #cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
+   #cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup fp
 #   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action scrub int
 
    if [ "$copyFlag" = true ]; then
@@ -131,6 +145,7 @@ if [ "$compileFlag" = true ]; then
    # assume the CPU2006 directories are clean. I've hard-coded the directories I'm going to copy out of
    for b in ${BENCHMARKS[@]}; do
       echo ${b}
+   	cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup $b
       SHORT_EXE=${b##*.} # cut off the numbers ###.short_exe
       if [ $b == "483.xalancbmk" ]; then 
          SHORT_EXE=Xalan #WTF SPEC???
