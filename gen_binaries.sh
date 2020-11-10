@@ -18,8 +18,8 @@ PK_DIR=/opt/riscv-pk/riscv64-unknown-linux-gnu/bin
 
 if [ ! -f $PK_DIR/pk ]; then
    echo "  No pk found under $PK_DIR"
-   exit 1
 fi
+
 RUN="spike -m4096 $PK_DIR/pk "
 CMD_FILE=commands.txt
 INPUT_TYPE=test

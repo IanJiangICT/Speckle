@@ -29,8 +29,12 @@ for bench in $bench_list; do
 	cp -rf $bench_src/$bench/run ./$bench/
 
 	run_cmd=${bench##*.}
-	if [ $bench == "482.sphinx3" ]; then run_cmd=sphinx_livepretend; fi
-	if [ $bench == "483.xalancbmk" ]; then run_cmd=Xalan fi
+	if [ $bench == "482.sphinx3" ]; then
+		run_cmd=sphinx_livepretend;
+	fi
+	if [ $bench == "483.xalancbmk" ]; then
+		run_cmd=Xalan
+	fi
 	run_cmd+="_base.riscv"
 
 	IFS=$'\n' read -d '' -r -a run_args< $WORK_DIR/commands/$bench.test.cmd
