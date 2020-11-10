@@ -148,7 +148,7 @@ if [ "$compileFlag" = true ]; then
    for b in ${BENCHMARKS[@]}; do
       echo ${b}
       cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup $b
-	  cd $BUILD_DIR
+      cd $BUILD_DIR
       SHORT_EXE=${b##*.} # cut off the numbers ###.short_exe
       if [ $b == "483.xalancbmk" ]; then 
          SHORT_EXE=Xalan #WTF SPEC???
